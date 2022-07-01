@@ -52,6 +52,9 @@ ExportedObj/
 *.pdb.meta
 *.mdb.meta
 
+# Fucking Library FOLDER
+/Library/
+
 # Unity3D generated file on crash reports
 sysinfo.txt
 
