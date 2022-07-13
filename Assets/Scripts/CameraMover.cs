@@ -12,8 +12,12 @@ public class CameraMover : MonoBehaviour {
         var xMove = Input.GetAxis("Horizontal");
         var yMove = Input.GetAxis("Vertical");
 
-        mouseX += Input.GetAxis("Mouse X") * MOUSE_SPEED * Time.deltaTime;
-        mouseY += Input.GetAxis("Mouse Y") * MOUSE_SPEED * Time.deltaTime;
+
+        if (Input.GetMouseButton(0)){
+            mouseX += Input.GetAxis("Mouse X") * MOUSE_SPEED * Time.deltaTime;
+            mouseY += Input.GetAxis("Mouse Y") * MOUSE_SPEED * Time.deltaTime;
+        }
+
         var moveVector = new Vector3(xMove, 0, yMove);
 
         transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
