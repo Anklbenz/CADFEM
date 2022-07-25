@@ -2,6 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Device : MonoBehaviour {
+    [Header("AssetSystemName")]
+    [SerializeField] private string assetName;
+    [Header("SensorData")]
+    [SerializeField] private List<Sensor> sensors;
+    
     [Header("Description")]
     [SerializeField] private string label;
 
@@ -10,57 +15,55 @@ public class Device : MonoBehaviour {
 
     [SerializeField] private Sprite sprite;
 
-    [Header("SensorData")]
-    [SerializeField] private List<Sensor> sensors;
-
-    [SerializeField] private RectTransform schemeInstanceRect;
-
     [Header("ModelTransforms")]
     [SerializeField] private Transform modelTransform;
 
     [SerializeField] private Transform doorTransform, outerBoxTransform;
+    [SerializeField] private RectTransform schemeTransform;
 
+    public string AssetSystemName => assetName;
     public Sprite Sprite => sprite;
     public string Label => label;
     public string Description => description;
 
     private ViewController _viewController;
-    private SettingsMenuControls _menuControls;
-    private SensorVisualHandler _sensorVisualHandler;
+    private SettingsMenuControl _menuControl;
+    private SensorsRotateHandler _sensorsRotateHandler;
 
     private void Awake(){
-        _viewController = new ViewController(modelTransform, doorTransform, outerBoxTransform, schemeInstanceRect);
-        _sensorVisualHandler = new SensorVisualHandler(sensors);
+        _viewController = new ViewController(modelTransform, doorTransform, outerBoxTransform, schemeTransform);
+        _sensorsRotateHandler = new SensorsRotateHandler(sensors);
     }
 
     private void OnDestroy(){
         ControlsDisconnect();
     }
 
-    public void Init(SettingsMenuControls menu){
-        _menuControls = menu;
+    public void Init(SettingsMenuControl menu, IDataSender dataSender){
+        foreach (var sensor in sensors)
+            sensor.Initialize(dataSender);
+        
+        _menuControl = menu;
         ControlsConnect();
     }
 
     private void LateUpdate(){
-        _sensorVisualHandler.Update();
+        _sensorsRotateHandler.Update();
     }
 
     private void ControlsConnect(){
-        _menuControls.rotateSensorToggle.onValueChanged.AddListener(_sensorVisualHandler.SetRotateMode);
-
-        _menuControls.modelViewToggle.onValueChanged.AddListener(_viewController.ModelView);
-        _menuControls.schemeViewToggle.onValueChanged.AddListener(_viewController.SchemeView);
-        _menuControls.forceLineToggle.onValueChanged.AddListener(_viewController.ForceLineView);
-        _menuControls.onFillingViewToggle.onValueChanged.AddListener(_viewController.OnlyFillingView);
+        _menuControl.OnModelViewTurnEvent +=_viewController.ModelView;
+        _menuControl.OnSchemeViewTurnEvent += _viewController.SchemeView;
+        _menuControl.OnForceLineViewTurnEvent +=_viewController.ForceLineView;
+        _menuControl.OnFilingViewTurnEvent += _viewController.OnlyFillingView;
+        _menuControl.OnRotateSensorTurnEvent += _sensorsRotateHandler.SetRotateMode;
     }
 
     private void ControlsDisconnect(){
-        _menuControls.rotateSensorToggle.onValueChanged.RemoveListener(_sensorVisualHandler.SetRotateMode);
-
-        _menuControls.modelViewToggle.onValueChanged.RemoveListener(_viewController.ModelView);
-        _menuControls.schemeViewToggle.onValueChanged.RemoveListener(_viewController.SchemeView);
-        _menuControls.forceLineToggle.onValueChanged.RemoveListener(_viewController.ForceLineView);
-        _menuControls.onFillingViewToggle.onValueChanged.RemoveListener(_viewController.OnlyFillingView);
+        _menuControl.OnModelViewTurnEvent -=_viewController.ModelView;
+        _menuControl.OnSchemeViewTurnEvent -= _viewController.SchemeView;
+        _menuControl.OnForceLineViewTurnEvent -=_viewController.ForceLineView;
+        _menuControl.OnFilingViewTurnEvent -= _viewController.OnlyFillingView;
+        _menuControl.OnRotateSensorTurnEvent -= _sensorsRotateHandler.SetRotateMode;
     }
 }

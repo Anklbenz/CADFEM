@@ -4,10 +4,10 @@ public class ViewController {
     private const float TRANSPARENCY_MIN_VALUE = 0.05f;
     private const float TRANSPARENCY_MAX_VALUE = 1.0f;
 
-    private readonly int _alphaScale = Shader.PropertyToID("_AlphaScale");
     private readonly Renderer[] _outerBoxChildRenderers, _doorChildRenders;
+    private readonly int _alphaScale = Shader.PropertyToID("_AlphaScale");
 
-    private RectTransform _schemeInstanceRect;
+    private readonly RectTransform _schemeInstanceRect;
     private readonly Transform _modelTransform, _outerBoxTransform;
 
     public ViewController(Transform modelTransform, Transform doorTransform, Transform outerBoxTransform, RectTransform schemeInstanceRect){
