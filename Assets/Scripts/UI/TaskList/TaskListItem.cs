@@ -1,10 +1,12 @@
 using System;
 using ThingData;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TaskListItem : MonoBehaviour {
-    [SerializeField] private Text typeText, taskCodeText, descriptionText, commentText;
+    [SerializeField] private TMP_Text typeText, operationIdText, statusText, commentText;
+    [SerializeField] private Image highlightBackground;
     [SerializeField] private Toggle selectToggle;
 
     public event Action<TaskData> OnTaskSelectEvent;
@@ -14,17 +16,20 @@ public class TaskListItem : MonoBehaviour {
         _taskData = taskData;
 
         typeText.text = taskData.row_type_name;
-        taskCodeText.text = taskData.row_code;
-        descriptionText.text = taskData.row_status_name;
+        operationIdText.text = taskData.row_code;
+        statusText.text = taskData.row_status_name;
         commentText.text = taskData.row_comment;
+
+        if (ColorUtility.TryParseHtmlString(taskData.row_status_color, out var color))
+            highlightBackground.color = color;
+        
 
         selectToggle.group = toggleGroup;
         selectToggle.onValueChanged.AddListener(OnValueChanged);
     }
 
     private void OnValueChanged(bool state){
-        if (state)
-            OnTaskSelectEvent?.Invoke(_taskData);
+        OnTaskSelectEvent?.Invoke(state ? _taskData : null);
     }
 
     private void OnDestroy() => selectToggle.onValueChanged.RemoveAllListeners();

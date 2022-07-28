@@ -1,10 +1,30 @@
 namespace ThingData {
 
     [System.Serializable]
+    public class Status {
+        public string status;
+    }
+    
+    [System.Serializable]
+    public class WorkLogOperationDropDownRow {
+        public int id;
+        public int work_log_operation_cp_id;
+        public string name;
+        public  bool is_selected;
+    }
+
+    [System.Serializable]
+    public class WorkLogOperationDropDownRows {
+        public WorkLogOperationDropDownRow[] rows;
+    }
+
+
+    [System.Serializable]
     public class ControlParamDropDownRow {
         public int id;
         public int work_instruction_operation_cp_id;
         public string name;
+
     }
     [System.Serializable]
     public class ControlParamDropDownRows {
@@ -17,14 +37,14 @@ namespace ThingData {
         public string operation_cp_type_code;
         public string name;
         public string value_nominal;
-        public string value_fact;
+        public float value_fact;
         public string value_unit;
         public bool state_nominal;
         public bool state_fact;
         public string drop_down_selected;
         public bool is_complete;
 
-        public ControlParamDropDownRow[] DropDownRows;
+        public WorkLogOperationDropDownRow[] DropDownRows;
     }
     
     [System.Serializable]
@@ -56,7 +76,7 @@ namespace ThingData {
         public string modifier_person_id;
         public bool is_foto_required;
         public string url_foto;
-        public string work_instruction_operation_id;
+        public int work_instruction_operation_id;
         public string work_instruction_id;
         public string fact_start_dt;
         public string fat_end_dt;
@@ -80,7 +100,7 @@ namespace ThingData {
         public string row_status_name;
         public string row_status_color;
         public string row_comment;
-        public string request_id;
+        public int request_id;
         public int work_log_id;
     }
 
@@ -105,4 +125,54 @@ namespace ThingData {
         public SensorData[] rows;
     }
 
+    [System.Serializable]
+    public class CreatedWorkLog {
+        public int id;
+        public string code;
+        public int asset_id;
+        public int assigned_person_id;
+        public string safety_rules;
+        public string description;
+    }
+    [System.Serializable]
+    public class CreatedWorkLogs {
+        public CreatedWorkLog[] rows;
+    }
+
+    [System.Serializable]
+    public class SelectedCPFromLastOperation {
+        public int id;
+        public int work_log_operation_cp_id;
+        public string name;
+        public int work_instruction_id;
+        private bool is_selected;
+    }
+
+    [System.Serializable]
+    public class SelectedCPFromLastOperationArray {
+        public SelectedCPFromLastOperation[] rows;
+    }
+
+    [System.Serializable]
+    public class GetInfo {
+        public int id;
+        public string code;
+        public int asset_id;
+        public int assigned_person_id;
+        public string fact_start_dt;
+        public string fact_end_dt;
+        public string comment;
+        public string work_log_status_code;
+        public int request_id;
+        public int duration_seconds;
+        public int main_work_instruction_id;
+        public string name;
+        public string description;
+        public string safety_rules;
+        public bool is_fault_request;
+    }
+
+    public class GetInfoArray {
+        public GetInfo[] rows;
+    }
 }

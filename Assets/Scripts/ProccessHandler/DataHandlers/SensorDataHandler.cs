@@ -1,19 +1,16 @@
 using System;
 using System.Linq;
-using ServiceRequestsData;
 using ThingData;
 
 public class SensorDataHandler : IDataSender {
-
-    private const string ASSET_TAG_VALUES_INFO_SERVICE = "GetAssetTagValuesInfo";
     public event Action OnDataChangedEvent;
 
-    private readonly WebRequestSender _webRequestSender;
+    private readonly ThingWorksServices _thingWorksServices;
     private readonly string _assetName;
     private SensorData[] _sensorsDataArray;
 
-    public SensorDataHandler(WebRequestSender webRequestSender){
-        _webRequestSender = webRequestSender;
+    public SensorDataHandler(ThingWorksServices thingWorksServices){
+        _thingWorksServices = thingWorksServices;
     }
 
     public SensorData GetData(string tag){
@@ -21,17 +18,8 @@ public class SensorDataHandler : IDataSender {
     }
 
     public async void GetDataRequest(string assetName){
-        var assetNameParam = CreateAssetNameParam(assetName);
-        var assets = await _webRequestSender.GetServiceResult<SensorsData, AssetName>(ASSET_TAG_VALUES_INFO_SERVICE, assetNameParam);
-
-        if (assets != null){
-            _sensorsDataArray = assets.rows;
-            OnDataChangedEvent?.Invoke();
-        }
-        else{
-            //some log or message about request result in _apiRequestDataGetter.ResponseCode
-        }
+        var assets = await _thingWorksServices.GetAssetTagValuesInfo(assetName);
+        _sensorsDataArray = assets;
+         OnDataChangedEvent?.Invoke();
     }
-
-    private AssetName CreateAssetNameParam(string assetName) => new AssetName() { thing = assetName };
 }

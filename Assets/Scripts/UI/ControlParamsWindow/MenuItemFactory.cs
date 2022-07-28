@@ -4,8 +4,8 @@ using Object = UnityEngine.Object;
 
 public class MenuItemFactory {
    private const string VALUE_CODE = "CP_VALUE";
-   private const string STATE_CODE = "CP_DROPDOWN";
-   private const string DROPDOWN_CODE = "CP_STATE";
+   private const string STATE_CODE = "CP_STATE";
+   private const string DROPDOWN_CODE = "CP_DROP_DOWN";
 
    private readonly ControlParamsMenuItemInput _inputPrefab;
    private readonly ControlParamsMenuItemState _statePrefab;

@@ -1,21 +1,25 @@
 using ThingData;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class OperationButton : MonoBehaviour {
-    [SerializeField] private Text idLabel;
+    [SerializeField] private TMP_Text idLabel;
     [SerializeField] private Button button;
     [SerializeField] private Image backImage;
 
-    public Color Color{
-        get => backImage.color;
-        set => backImage.color = value;
-    }
-    // Action<Operation> callback,
-    public void Initialize(Operation operation) 
-    {
+    private Operation _operation;
+
+    public void Initialize(Operation operation){
+        _operation = operation;
         idLabel.text = operation.mark_with_zeroes;
-      //  button.onClick.AddListener(delegate { callback(operation); });
+        
+        UpdateColor();
+    }
+
+    public void UpdateColor(){
+        if (ColorUtility.TryParseHtmlString(_operation.operation_status_color, out var color))
+            backImage.color = color;
     }
 
     private void OnDestroy() => button.onClick.RemoveAllListeners();

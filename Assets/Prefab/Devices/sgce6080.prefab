@@ -43499,7 +43499,7 @@ GameObject:
   - component: {fileID: 7445133222330486412}
   - component: {fileID: 7445133222330486403}
   m_Layer: 0
-  m_Name: UIDataCanvas
+  m_Name: CanvasUIData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
